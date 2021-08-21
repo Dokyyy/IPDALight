@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # use GPU
 
 def main():
     date = datetime.now().strftime('%Y%m%d_%H%M%S')
-    dataset = "1_6"
+    dataset = "3_3"
 
     cityflow_config = {
         "interval": 1,
@@ -25,10 +25,6 @@ def main():
         "dir": "data/",
         "roadnetFile": "template_lsr/new/" + dataset + "/" + "roadnet_" + dataset + ".json",
         "flowFile": "template_lsr/new/" + dataset + "/" + "syn_" + dataset + "_gaussian_500_1h.json",
-        # "roadnetFile": "hangzhou_4x4_gudang_18041610_1h/roadnet_4_4.json",
-        # "flowFile": "hangzhou_4x4_gudang_18041610_1h/hangzhou_4_4_gudang_18041610_1h.json",
-        # "roadnetFile": "dongfeng/jinan_roadnet.json",
-        # "flowFile": "dongfeng/jinan_flow.json",
         "rlTrafficLight": True,
         "saveReplay": False,
         "roadnetLogFile": "replayRoadNet.json",
@@ -84,7 +80,6 @@ def main():
     config["state_size"] = env.state_size
 
     Magents = {}
-    Magents_timing = {}
     for id_ in intersection_id:
         agent = DQNAgent(id_,
                          state_size=config["state_size"],
@@ -94,28 +89,13 @@ def main():
                          timing_list=timing_list[id_],
                          env=env)
         Magents[id_] = agent
-        # Magents[id_].load("DQN-"+dataset+".h5" + '.' + id_)
 
     EPISODES = config['epoch']
     total_step = 0
-    episode_rewards = {id_: [] for id_ in intersection_id}
-    episode_scores = {id_: [] for id_ in intersection_id}
     episode_travel_time = []
-    with open(result_dir + "/" + "Travel Time-" + dataset + "-PCD-DQN.csv", 'a+') as ttf:
+    with open(result_dir + "/" + "Travel Time-" + dataset + "-IPDALight.csv", 'a+') as ttf:
         ttf.write("travel time\n")
     ttf.close()
-    for id_ in intersection_id:
-        with open(result_dir + "/" + "Timing choose-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-            ttf.write("timing\n")
-        ttf.close()
-
-        with open(result_dir + "/" + "pressure-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-            ttf.write("pressure\n")
-        ttf.close()
-
-        with open(result_dir + "/" + "greenwave-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-            ttf.write("greenwave\n")
-        ttf.close()
 
     with tqdm(total=EPISODES * config['num_step']) as pbar:
         for i in range(EPISODES):
@@ -132,8 +112,6 @@ def main():
             for id_ in intersection_id:
                 state[id_] = env.get_state_(id_)
 
-            # episode_reward = {id_: 0 for id_ in intersection_id}  # for every agent
-            # episode_score = {id_: 0 for id_ in intersection_id}  # for everg agent
             for episode_length in range(config['num_step']):
                 for id_, t in rest_timing.items():
                     if t == 0:
@@ -169,39 +147,18 @@ def main():
                 # print("rest_timing: ", rest_timing, "\n")
 
             episode_travel_time.append(env.eng.get_average_travel_time())
-            with open(result_dir + "/" + "Travel Time-" + dataset + "-PCD-DQN.csv", 'a+') as ttf:
+            with open(result_dir + "/" + "Travel Time-" + dataset + "-IPDALight.csv", 'a+') as ttf:
                 ttf.write("{}\n".format(env.eng.get_average_travel_time()))
             ttf.close()
-
-            for id_ in intersection_id:
-                with open(result_dir + "/" + "Timing choose-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-                    ttf.write("epoch " + str(i+1) + "\t")
-                    ttf.write(str(timing_choose[id_]) + "\n\n")
-                ttf.close()
-
-                with open(result_dir + "/" + "pressure-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-                    ttf.write("epoch " + str(i + 1) + "\t")
-                    ttf.write(str(pressure[id_]) + "\n\n")
-                ttf.close()
-
-                with open(result_dir + "/" + "greenwave-" + dataset + "-" + id_ + ".txt", 'a+') as ttf:
-                    ttf.write("epoch " + str(i + 1) + "\t")
-                    ttf.write(str(green_wave[id_]) + "\n\n")
-                ttf.close()
 
             print('\n')
             print('Epoch {} travel time:'.format(i+1), env.eng.get_average_travel_time())
 
-            # save_model
-            # for id_ in intersection_id:
-            #     Magents[id_].save(model_dir + "/{}-{}.h5".format(config['model'], i + 1) + '.' + id_)
-
         df = pd.DataFrame({"travel time": episode_travel_time})
-        df.to_csv(result_dir + '/PCD.csv', index=False)
+        df.to_csv(result_dir + '/IPDALight.csv', index=False)
 
         # save figure
         plot_data_lists([episode_travel_time], ['travel time'], figure_name=result_dir + '/travel time.pdf')
-
 
         # env.bulk_log()
 
