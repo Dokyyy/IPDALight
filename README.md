@@ -3,13 +3,32 @@ IPDALight for traffic signal control
 
 ## Usage
 ### 1. Simulator installation
-First, install CityFlow simulator. Guide files can be found in https://cityflow-project.github.io/
+First, install CityFlow simulator. Detailed introduction guide files can be found in https://cityflow-project.github.io/
+
+#### 1. Install cpp dependencies
+``sudo apt update && sudo apt install -y build-essential cmake``
+
+#### 2. Clone CityFlow project from github
+``git clone https://github.com/cityflow-project/CityFlow.git``
+
+#### 3. Go to CityFlow project’s root directory and run
+``pip install .``
+
+#### 4. Wait for installation to complete and CityFlow should be successfully installed
+``import cityflow``
+``eng = cityflow.Engine``
+
 
 ### 2. Run the code
+The main file is train.py
+
+#### 1. Config
+Dataset can be chosed in dict cityflow_config in ``train.py``. Parameters (e.g., the number of episode, num_step for each episode) for simulation can be modified in dict config in ``train.py``.
+
+#### 2. Run the code
 ``python train.py``
 
-### 3. Config
-Dataset can be chosed in dict cityflow_config in ``train.py``. the parameters (e.g., the number of episode, num_step for each episode) for simulation can be modified in dict config in ``train.py``.
+
 
 ## Dataset
 
