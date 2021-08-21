@@ -79,20 +79,39 @@ class CityFlowEnvM(object):
         return state
 
     # get lane pressure with each vehicle
-    def get_lanepressure(self, id_, lane):
+    def get_lanepressure(self, id_, lane, distances):
         lane_pressure = 0
         sigma = 1.5
         max_speed = 11.111
+        L = 300
         vehicles = self.eng.get_lane_vehicles()[lane]
         # print("vehicles:",vehicles)
-        for v in vehicles:
-            lane_pressure += float(format(math.log(sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (float(self.eng.get_vehicle_info(v)["speed"])+1) + 1),'.4f'))
-            # print("speed for", v, ":", self.eng.get_vehicle_info(v)["speed"],"pressure:",format(math.log(w1*float(self.eng.get_vehicle_info(v)["speed"]) + w2*max_speed + 1),'.4f'))
+        if lane in self.start_lane[id_]:
+            for v in vehicles:
+                x = distances[v]
+                lane_pressure += float(format(math.log(
+                x / L * sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
+                        float(self.eng.get_vehicle_info(v)["speed"]) + 1) + 1), '.4f'))
+                # lane_pressure += float(format(math.log(
+                # sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
+                #         float(self.eng.get_vehicle_info(v)["speed"]) + 1) + 1), '.4f'))
+                # print("speed for", v, ":", self.eng.get_vehicle_info(v)["speed"],"pressure:",format(math.log(w1*float(self.eng.get_vehicle_info(v)["speed"]) + w2*max_speed + 1),'.4f'))
+        else:
+            for v in vehicles:
+                x = distances[v]
+                lane_pressure += float(format(math.log(
+                (L - x) / L * sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
+                        float(self.eng.get_vehicle_info(v)["speed"]) + 1) + 1), '.4f'))
+                # lane_pressure += float(format(math.log(
+                # sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
+                #         float(self.eng.get_vehicle_info(v)["speed"]) + 1) + 1), '.4f'))
+                # print("speed for", v, ":", self.eng.get_vehicle_info(v)["speed"],"pressure:",format(math.log(w1*float(self.eng.get_vehicle_info(v)["speed"]) + w2*max_speed + 1),'.4f'))
         return lane_pressure
 
     def get_neigh_pressure(self, nei_id_, row, col, nei_row, nei_col, action_phase = None):
         pressure = 0
-        start_vehicle_count = [self.get_lanepressure(nei_id_, lane) for lane in self.start_lane[nei_id_]]
+        distances = self.eng.get_vehicle_distance()
+        start_vehicle_count = [self.get_lanepressure(nei_id_, lane, distances) for lane in self.start_lane[nei_id_]]
 
         if nei_row < row: # left, pressure comes from turn-right(start_vehicle_count[5]) AND (WE(start_vehicle_count[1]) OR NSL(start_vehicle_count[6]))
             if action_phase == 1: # WE
@@ -134,10 +153,11 @@ class CityFlowEnvM(object):
         state = self.intersection_info(id_)
         pressure = []
         temp = []
+        distances = self.eng.get_vehicle_distance()
         # start_vehicle_count = [state['start_lane_vehicle_count'][lane] for lane in self.start_lane[id_]]
         # end_vehicle_count = [state['end_lane_vehicle_count'][lane] for lane in self.end_lane[id_]]
-        start_vehicle_count = [self.get_lanepressure(id_, lane) for lane in self.start_lane[id_]]
-        end_vehicle_count = [self.get_lanepressure(id_, lane) for lane in self.end_lane[id_]]
+        start_vehicle_count = [self.get_lanepressure(id_, lane, distances) for lane in self.start_lane[id_]]
+        end_vehicle_count = [self.get_lanepressure(id_, lane, distances) for lane in self.end_lane[id_]]
 
         # 对应车道求压力差
         end_vehicle_count_avg = []
@@ -244,8 +264,9 @@ class CityFlowEnvM(object):
         state = self.intersection_info(id_)
         # start_vehicle_count = [state['start_lane_vehicle_count'][lane] for lane in self.start_lane[id_]]
         # end_vehicle_count = [state['end_lane_vehicle_count'][lane] for lane in self.end_lane[id_]]
-        start_vehicle_count = [self.get_lanepressure(id_, lane) for lane in self.start_lane[id_]]
-        end_vehicle_count = [self.get_lanepressure(id_, lane) for lane in self.end_lane[id_]]
+        distances = self.eng.get_vehicle_distance()
+        start_vehicle_count = [self.get_lanepressure(id_, lane, distances) for lane in self.start_lane[id_]]
+        end_vehicle_count = [self.get_lanepressure(id_, lane, distances) for lane in self.end_lane[id_]]
         # pressure = sum(start_vehicle_count) - sum(end_vehicle_count)
         start_vehicle_count_cop = []
         end_vehicle_count_cop = []
