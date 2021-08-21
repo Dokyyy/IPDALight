@@ -19,6 +19,6 @@ Dataset can be chosed in dict cityflow_config in ``train.py``. the parameters (e
 
 * real-world data
 
-  Traffic files of Hangzhou City can be found in ``data/hangzhou_4x4_gudang_18041610_1h``, which contains 16 intersections in the form of a 4x4 grid. Traffic files of Hangzhou City can be found in ``data/dongfeng``, which contains 12 intersections in the form of a 3x4 grid.
+  Traffic files of Hangzhou City can be found in ``data/hangzhou``, which contains 16 intersections in the form of a 4x4 grid. Traffic files of Hangzhou City can be found in ``data/jinan``, which contains 12 intersections in the form of a 3x4 grid.
   
   
