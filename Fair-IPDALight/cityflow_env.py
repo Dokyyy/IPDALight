@@ -150,7 +150,7 @@ class CityFlowEnvM(object):
             for v in vehicles:
                 x = distances[v]
                 veh_intensity = float(format(math.log(
-                    x / L * sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
+                    (L - x) / L * sigma * (max_speed - float(self.eng.get_vehicle_info(v)["speed"])) / (
                             float(self.eng.get_vehicle_info(v)["speed"]) + 1) + 1), '.4f'))
                 waiting_time = self.get_waiting_time(v)
                 lane_pressure += veh_intensity + w * waiting_time
