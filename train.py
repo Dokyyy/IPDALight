@@ -11,7 +11,7 @@ from utility import *
 # from network import MultiLightAgent
 from dqn_agent import MDQNAgent, DQNAgent
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # use GPU
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 def main():
@@ -74,7 +74,8 @@ def main():
                        intersection_id,
                        num_step=config["num_step"],
                        thread_num=8,
-                       cityflow_config_file=config["cityflow_config_file"]
+                       cityflow_config_file=config["cityflow_config_file"],
+                       dataset=dataset
                        )
 
     config["state_size"] = env.state_size

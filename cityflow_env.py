@@ -19,7 +19,8 @@ class CityFlowEnvM(object):
                  num_step=2000,
                  thread_num=1,
                  cityflow_config_file='example/config_1x2.json',
-                 path_to_log='result'
+                 path_to_log='result',
+                 dataset = '1_3',
                  ):
         self.eng = cityflow.Engine(cityflow_config_file, thread_num=thread_num)
         self.num_step = num_step
@@ -36,6 +37,7 @@ class CityFlowEnvM(object):
         self.lane_mapping = {}
         self.phase_startLane_mapping = {}
         self.intersection_lane_mapping = {}  # {id_:[lanes]}
+        self.dataset = dataset
 
         initial_phase = {}
         for id_ in self.intersection_id:
@@ -80,10 +82,20 @@ class CityFlowEnvM(object):
 
     # get lane pressure with each vehicle
     def get_lanepressure(self, id_, lane, distances):
+        L = 300
+        if self.dataset == 'jinan':
+            if lane[-3] == '0' or lane[-3] == '2':
+                L = 400
+            else:
+                L = 800
+        if self.dataset == 'hangzhou':
+            if lane[-3] == '0' or lane[-3] == '2':
+                L = 800
+            else:
+                L = 600
         lane_pressure = 0
         sigma = 1.5
         max_speed = 11.111
-        L = 300
         vehicles = self.eng.get_lane_vehicles()[lane]
         # print("vehicles:",vehicles)
         if lane in self.start_lane[id_]:
