@@ -4,7 +4,10 @@ the intersection is extremely low, resulting in the serious unfairness problem.
 
 By considering the vehicle waiting time when we design the intensity (i.e., vehicles with longer waiting time will have a higher intensity value), the fairness of the mentioned scenario can be guaranteed.
 
+As shown in the formula (for caculating the intensity of vehicles) below, we use tw to represent the waiting time of the vehicle, and σ to denote the weight of the waiting time.
+
 ![image](https://user-images.githubusercontent.com/29703034/130350586-2b6b6963-4a48-4796-86b6-1eecea92fb3a.png)
+
 
 ## Experiments
 Codes of Fair-IPDALight are in the folder *Fair-IPDALight*, and the dataset files can be found in the folder *data*. Running the main file *train.py*.
