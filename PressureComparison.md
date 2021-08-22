@@ -1,10 +1,18 @@
 # Comparison of intersection pressure
 Max Pressure has been widely used in the transportation field, and the concept of pressure (i.e., the difference between the number of vehicles entering the intersection and the number of vehicles leaving the intersection) is an objective and fair metric for the evaluation of traffic control effects.
 
-
 ## Experiments
-### Run the code
-Codes for cmparison of intersection pressure are in the folder Pressure-IPDALight, and the dataset files can be found in the folder *data*. Running the main file *train.py*.
+Codes for cmparison of intersection pressure are in the folder *Pressure-IPDALight*, and the dataset files can be found in the folder *data*. 
+
+### 1. Add the dataset
+Copy the folder *data* into the folder *Pressure-IPDALight*.
+
+### 2. Config
+Dataset can be chosed in the dictionary *cityflow_config* in ``train.py``. Parameters (e.g., the number of episode, num_step for each episode) for simulation can be modified in the dictionary *config* in ``train.py``.
+
+### 3. Run the code
+
+``cd Pressure-IPDALight``
 
 ``python train.py``
 

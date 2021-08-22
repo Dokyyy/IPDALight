@@ -10,10 +10,8 @@ Reinforcement Learning (RL) has been recognized as one of the most effective met
 - pandas
 - numpy
 
-
-## Usage
-### 1. Simulator installation
-First, install CityFlow simulator. Detailed introduction guide files can be found in https://cityflow-project.github.io/
+### Simulator installation
+Our experiments are implemented on top of the traffic simulator Cityflow. Detailed installation guide files can be found in https://cityflow-project.github.io/
 
 #### 1. Install cpp dependencies
 ``sudo apt update && sudo apt install -y build-essential cmake``
@@ -29,7 +27,24 @@ First, install CityFlow simulator. Detailed introduction guide files can be foun
 
 ``eng = cityflow.Engine``
 
-### 2.Dataset
+## Files
+* ``train.py``
+
+  The main file of experiments. Choosing the dataset, setting simulation parameters and starting the train.
+
+* ``dqn_agent.py``
+
+  Implement RL agent for proposed IPDALight.
+
+* ``cityflow_env.py``
+
+  Define a simulator environment to interact with the simulator and obtain needed data (e.g., state, action and reward).
+
+* ``utility.py``
+
+  Some functions for experiments (e.g., reading information from roadnet file and plot the travel time convergence).
+
+## Dataset
 For the experiments, we used both synthetic and realworld traffic datasets provided by https://traffic-signal-control.github.io/dataset.html.
 
 * synthetic data
@@ -40,17 +55,7 @@ For the experiments, we used both synthetic and realworld traffic datasets provi
 
 We used two datasets collected from the real-world traffic of two cities (i.e., Hangzhou and Jinan) in China via roadside surveillance cameras. Traffic files of Hangzhou can be found in ``data/hangzhou``, which contains 16 intersections in the form of a 4x4 grid. Traffic files of Jinan can be found in ``data/jinan``, which contains 12 intersections in the form of a 3x4 grid.
 
-### 3. Run the code
-
-#### 1. Config
-Dataset can be chosed in dict cityflow_config in ``train.py``. Parameters (e.g., the number of episode, num_step for each episode) for simulation can be modified in dict config in ``train.py``.
-In our experiments, we set the simulation episode 200, the timespan of each episode 3600 seconds, the weight factor of vehicle speed to 1, the shrinkage factor of neighboring intersection impacts to 0.1, the batch size to 32, the discount factor to 0.95, the learning rate to 1 and the probability of selecting a random action to 0.05. 
-
-#### 2. Run the main file
-``python train.py``
-
-## Comparison of average travel time
-### 1. Methods
+## Comparison methods
 |Method|paper link|source code link|
 |--|--|--|
 |**Fixed Time**|***Traffic engineering***<br>A policy that selects control phases in a cyclical way with a predefined duration and phase sequence.<br>https://trid.trb.org/view/310674|-|
@@ -59,15 +64,20 @@ In our experiments, we set the simulation episode 200, the timespan of each epis
 **CoLight**|***CoLight: Learning Network-level Cooperation for Traffic Signal Control***<br>A deep RL-based method that considers the neighboring intersection information, which uses graph attentional networks to facilitate the communication among intersections.<br>https://dl.acm.org/doi/abs/10.1145/3357384.3357902|https://github.com/wingsweihua/colight|
 |**PressLight**|***PressLight: Learning Max Pressure Control to Coordinate Traffic Signals in Arterial Network***<br>A deep RL-based method that can effectively select control phases for intersection pressure minimization based on the MP theory.<br>https://faculty.ist.psu.edu/jessieli/Publications/2019-KDD-presslight.pdf|https://github.com/wingsweihua/presslight|
 
-### 2. Comparison results of average vehicle travel time
-![image](https://user-images.githubusercontent.com/29703034/130348368-d8efffc0-25f7-4c78-9ae5-32500fe7f8c2.png)
 
-## Other experiments
-### 1. Comparison of fairness
+## Experiments README
+### 1. Comparison of average travel time and convergence rate
+Detailed README for expriment of comparison of average travel time and convergence rate
+[TravelTimeComparison](https://github.com/Dokyyy/IPDALight/blob/main/Comparison.md)
+
+### 2. Comparison of fairness
+Detailed README for expriment of comparison of fairness
 [FairnessComparison](https://github.com/Dokyyy/IPDALight/blob/main/FairnessComparison.md)
 
-### 2. Comparison of intersection pressure
+### 3. Comparison of intersection pressure
+Detailed README for expriment of comparison of intersection pressure
 [PressureComparison](https://github.com/Dokyyy/IPDALight/blob/main/PressureComparison.md)
 
-### 3. Comparison of greenwave control effects
+### 4. Comparison of greenwave control effects
+Detailed README for expriment of comparison of greenwave control effects
 [GreenwaveComparison](https://github.com/Dokyyy/IPDALight/blob/main/GreenwaveComparison.md)
