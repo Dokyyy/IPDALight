@@ -13,6 +13,6 @@ Codes of Fair-IPDALight are in the folder *Fair-IPDALight*, and the dataset file
 ``python train.py`` 
 
 ### Results
-After the code is executed, we can get a result file named *Max Waiting Time-dataset-FAIR-IPDALight.csv*, which records the maximum vehicle waiting time of each episode. Then we take the average of the maximum waiting time after the algorithm is stable as the result in the table below.
+After the code is executed, we can get a result file named *Max Waiting Time-dataset-FAIR-IPDALight.csv*, which records the maximum vehicle waiting time of each episode. Then we take the average of the maximum waiting time after the algorithm converges as the result in the table below.
 
 ![image](https://user-images.githubusercontent.com/29703034/130352309-350e100e-10a3-436e-8083-7f9c8176e10e.png)

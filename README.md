@@ -70,4 +70,4 @@ In our experiments, we set the simulation episode 200, the timespan of each epis
 [PressureComparison](https://github.com/Dokyyy/IPDALight/blob/main/PressureComparison.md)
 
 ### 3. Comparison of greenwave control effects
-[GreenwavegComparison](https://github.com/Dokyyy/IPDALight/blob/main/GreenwavegComparison.md)
+[GreenwaveComparison](https://github.com/Dokyyy/IPDALight/blob/main/GreenwaveComparison.md)
