@@ -51,13 +51,13 @@ In our experiments, we set the simulation episode 200, the timespan of each epis
 
 ## Comparison of average travel time
 ### 1. Methods
-<img width=200/> Method <img width=200/>|paper link|source code link
---|:--:|--:
-**Fixed Time**: a policy that selects control phases in a cyclical way with a predefined duration and phase sequence.|https://trid.trb.org/view/310674|-
-**SOTL**: a method that adaptively controls traffic lights based on a threshold indicating the number of waiting vehicles.|https://arxiv.org/abs/nlin/0610040v1|https://github.com/tianrang-intelligence/TSCC2019/blob/master/sotl_agent.py
-**GRL**: an RL-based method based on Q-learning for coordinated traffic signal control, which can learn the joint Q-function of two adjacent intersections by using a coordination graph.|http://fransoliehoek.net/docs/VanDerPol16LICMAS.p|https://traffic-signal-control.github.io/code.html
-**CoLight**: a deep RL-based method that considers the neighboring intersection information, which uses graph attentional networks to facilitate the communication among intersections.|https://dl.acm.org/doi/abs/10.1145/3357384.3357902|https://github.com/wingsweihua/colight
-**PressLight**: a deep RL-based method that can effectively select control phases for intersection pressure minimization based on the MP theory.|https://faculty.ist.psu.edu/jessieli/Publications/2019-KDD-presslight.pdf|https://github.com/wingsweihua/presslight
+|Method|paper link|source code link|
+|--|--|--|
+|**Fixed Time**|***Traffic engineering***<br>A policy that selects control phases in a cyclical way with a predefined duration and phase sequence.<br>https://trid.trb.org/view/310674|-|
+|**SOTL**|***Self organizing traffic lights: A realistic simulation***<br>A method that adaptively controls traffic lights based on a threshold indicating the number of waiting vehicles<br>https://arxiv.org/abs/nlin/0610040v1|https://github.com/tianrang-intelligence/TSCC2019/blob/master/sotl_agent.py|
+|**GRL**|***Coordinated deep reinforcement learners for traffic light control***<br>An RL-based method based on Q-learning for coordinated traffic signal control, which can learn the joint Q-function of two adjacent intersections by using a coordination graph.<br>https://www.elisevanderpol.nl/papers/vanderpolNIPSMALIC2016.pdf|https://traffic-signal-control.github.io/code.html|
+**CoLight**|***CoLight: Learning Network-level Cooperation for Traffic Signal Control***<br>A deep RL-based method that considers the neighboring intersection information, which uses graph attentional networks to facilitate the communication among intersections.<br>https://dl.acm.org/doi/abs/10.1145/3357384.3357902|https://github.com/wingsweihua/colight|
+|**PressLight**|***PressLight: Learning Max Pressure Control to Coordinate Traffic Signals in Arterial Network***<br>A deep RL-based method that can effectively select control phases for intersection pressure minimization based on the MP theory.<br>https://faculty.ist.psu.edu/jessieli/Publications/2019-KDD-presslight.pdf|https://github.com/wingsweihua/presslight|
 
 ### 2. Comparison results of average vehicle travel time
 ![image](https://user-images.githubusercontent.com/29703034/130348368-d8efffc0-25f7-4c78-9ae5-32500fe7f8c2.png)
