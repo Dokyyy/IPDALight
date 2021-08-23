@@ -25,8 +25,9 @@ class DQNAgent(object):
         self.action_size = action_size
         self.memory_size = 2000
         self.memory = deque(maxlen=self.memory_size)
+        self.latest_state = np.array([0 for _ in range(9)])
         self.gamma = 0.95  # discount rate
-        self.epsilon = 0.1  # exploration rate
+        self.epsilon = 0.05  # exploration rate
         self.learning_rate = 0.001
         self.step = 0
         self.batch_size = batch_size
@@ -47,6 +48,7 @@ class DQNAgent(object):
     def remember(self, state, action, reward, next_state):
         action = self.phase_list.index(action)  # index
         self.memory.append((state, action, reward, next_state))
+        self.latest_state = next_state
 
     def remember_timing(self, state, timing, reward, next_state):
         timing = self.timing_list.index(timing)  # index
@@ -72,8 +74,11 @@ class DQNAgent(object):
 
         lr = 1
         for i, replay in enumerate(replay_batch):
-            _, a, reward, _ = replay
-            Q[i][a] = (1 - lr) * Q[i][a] + lr * (reward + self.gamma * np.amax(Q_next[i]))
+            _, a, reward, next_state = replay
+            if not (next_state == self.latest_state).all():
+                reward += self.gamma * np.amax(Q_next[i])
+            # reward += self.gamma * np.amax(Q_next[i])
+            Q[i][a] = (1 - lr) * Q[i][a] + lr * reward
 
         # 传入网络训练
         # print("s_batch:\n", s_batch, "Q:\n", Q)
