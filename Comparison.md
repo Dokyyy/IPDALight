@@ -7,7 +7,7 @@ Following existing studies, we use the average travel time to evaluate the perfo
 ### 1. Config
 Dataset can be chosed in the dictionary *cityflow_config* in ``train.py``. Parameters (e.g., the number of episode, num_step for each episode) for simulation can be modified in the dictionary *config* in ``train.py``.
 
-In our experiments, we set the simulation episode to 200, the timespan of each episode to 3600 seconds, the weight factor of vehicle speed to 1, the shrinkage factor of neighboring intersection impacts to 0.1, the batch size to 32, the discount factor to 0.95, the learning rate to 1 and the probability of selecting a random action to 0.05. 
+In our experiments, we set the simulation episode to 200, the timespan of each episode to 3600 seconds, the weight factor of vehicle speed to 1, the shrinkage factor of neighboring intersection impacts to 0.1, the batch size to 32, the discount factor to 0.95, the learning rate to 0.001 and the probability of selecting a random action to 0.05. 
 
 ### 2. Run the code
 
