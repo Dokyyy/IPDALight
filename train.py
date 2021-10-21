@@ -16,15 +16,17 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def main():
     date = datetime.now().strftime('%Y%m%d_%H%M%S')
-    dataset = "3_3"
+    dataset = "hangzhou"
 
     cityflow_config = {
         "interval": 1,
         "seed": 0,
         "laneChange": False,
         "dir": "data/",
-        "roadnetFile": "template_lsr/new/" + dataset + "/" + "roadnet_" + dataset + ".json",
-        "flowFile": "template_lsr/new/" + dataset + "/" + "syn_" + dataset + "_gaussian_500_1h.json",
+        # "roadnetFile": "template_lsr/new/" + dataset + "/" + "roadnet_" + dataset + ".json",
+        # "flowFile": "template_lsr/new/" + dataset + "/" + "syn_" + dataset + "_gaussian_500_1h.json",
+        "flowFile": "hangzhou/hangzhou_4_4.json",
+        "roadnetFile": "hangzhou/roadnet_4_4.json",
         "rlTrafficLight": True,
         "saveReplay": False,
         "roadnetLogFile": "replayRoadNet.json",
@@ -80,8 +82,10 @@ def main():
 
     config["state_size"] = env.state_size
 
+
     Magents = {}
     for id_ in intersection_id:
+        # print(len(phase_list[id_]))
         agent = DQNAgent(id_,
                          state_size=config["state_size"],
                          action_size=len(phase_list[id_]),
@@ -105,6 +109,7 @@ def main():
             action = {}
             action_phase = {}
             timing_phase = {}
+            simulation_time = 0
             reward = {id_: 0 for id_ in intersection_id}
             rest_timing = {id_: 0 for id_ in intersection_id}
             timing_choose = {id_: [] for id_ in intersection_id}
@@ -134,8 +139,9 @@ def main():
                         pressure[id_].append(p)
                         green_wave[id_].append([action_phase[id_], timing_phase[id_]])
 
-
-                next_state, reward_ = env.step(action_phase)  # one step
+                # t1 = time()
+                next_state, reward_, t1 = env.step(action_phase, episode_length)  # one step
+                simulation_time += t1
 
                 total_step += 1
                 pbar.update(1)
@@ -154,6 +160,7 @@ def main():
 
             print('\n')
             print('Epoch {} travel time:'.format(i+1), env.eng.get_average_travel_time())
+            print('Simulation Time:', simulation_time)
 
         df = pd.DataFrame({"travel time": episode_travel_time})
         df.to_csv(result_dir + '/IPDALight.csv', index=False)
