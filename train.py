@@ -13,7 +13,6 @@ from dqn_agent import MDQNAgent, DQNAgent
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-
 def main():
     date = datetime.now().strftime('%Y%m%d_%H%M%S')
     dataset = "hangzhou"
@@ -32,7 +31,6 @@ def main():
         "roadnetLogFile": "replayRoadNet.json",
         "replayLogFile": "replayLogFile.txt"
     }
-
 
     with open(os.path.join("data/", "cityflow.config"), "w") as json_file:
         json.dump(cityflow_config, json_file)
@@ -58,7 +56,6 @@ def main():
 
     timing_list = {id_: [i*5 + config['phase_step'] for i in range(1,5)] for id_ in intersection_id}
     config['timing_list'] = timing_list
-
     model_dir = "model/{}_{}".format(config['model'], date)
     result_dir = "result/{}_{}".format(config['model'], date)
     config["result_dir"] = result_dir
@@ -81,7 +78,6 @@ def main():
                        )
 
     config["state_size"] = env.state_size
-
 
     Magents = {}
     for id_ in intersection_id:
