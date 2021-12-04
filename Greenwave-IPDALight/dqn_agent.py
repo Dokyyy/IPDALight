@@ -60,25 +60,26 @@ class DQNAgent(object):
         act_values = self.model.predict(state)
         return np.argmax(act_values[0])  # returns action
 
-    def replay(self): # Timing if flag for agent_timing
+    def replay(self):  # Timing if flag for agent_timing
         if len(self.memory) < self.batch_size:
             return
-        self.step + 1
+        self.step += 1
+        state_t = self.memory[-1][-1]
         replay_batch = random.sample(self.memory, self.batch_size)
         s_batch = np.reshape(np.array([replay[0] for replay in replay_batch]), [self.batch_size, self.state_size])
         next_s_batch = np.reshape(np.array([replay[3] for replay in replay_batch]),
-                                      [self.batch_size, self.state_size])
+                                  [self.batch_size, self.state_size])
 
         Q = self.model.predict(s_batch)
         Q_next = self.model.predict(next_s_batch)
 
         lr = 1
         for i, replay in enumerate(replay_batch):
-            _, a, reward, next_state = replay
-            if not (next_state == self.latest_state).all():
-                reward += self.gamma * np.amax(Q_next[i])
-            # reward += self.gamma * np.amax(Q_next[i])
-            Q[i][a] = (1 - lr) * Q[i][a] + lr * reward
+            _, a, reward, state_n = replay
+            if (state_t == state_n).all():
+                Q[i][a] = (1 - lr) * Q[i][a] + lr * reward
+            else:
+                Q[i][a] = (1 - lr) * Q[i][a] + lr * (reward + self.gamma * np.amax(Q_next[i]))
 
         # 传入网络训练
         # print("s_batch:\n", s_batch, "Q:\n", Q)

@@ -39,7 +39,7 @@ class CityFlowEnvM(object):
         self.intersection_lane_mapping = {}  # {id_:[lanes]}
         self.dataset = dataset
         self.lane_intensity = {}
-        distances = self.eng.get_vehicle_distance()
+        # distances = self.eng.get_vehicle_distance()
 
         initial_phase = {}
         for id_ in self.intersection_id:
@@ -137,7 +137,7 @@ class CityFlowEnvM(object):
 
     def get_neigh_pressure(self, nei_id_, row, col, nei_row, nei_col, action_phase = None):
         pressure = 0
-        distances = self.eng.get_vehicle_distance()
+        # distances = self.eng.get_vehicle_distance()
         start_vehicle_count = self.lane_intensity[nei_id_]['start']
 
         if nei_row < row: # left, pressure comes from turn-right(start_vehicle_count[5]) AND (WE(start_vehicle_count[1]) OR NSL(start_vehicle_count[6]))
@@ -177,9 +177,9 @@ class CityFlowEnvM(object):
         neighbor.append([row, column + 1])
         eta = 0.1 # discount ctor of neighbour's pressure
         state = self.intersection_info(id_)
-        pressure = []
+        intensity = []
         temp = []
-        distances = self.eng.get_vehicle_distance()
+        # distances = self.eng.get_vehicle_distance()
 
         # 对应车道求压力差
         end_vehicle_count_avg = []
@@ -197,12 +197,12 @@ class CityFlowEnvM(object):
         for i in range(len(start_vehicle_count_cop)):
             temp.append(start_vehicle_count_cop[i] - end_vehicle_count_avg[index[i]])
 
-        pressure.append(temp[1] + temp[7])  # straight
-        pressure.append(temp[3] + temp[5]) # straight
-        pressure.append(temp[0] + temp[6]) # left
-        pressure.append(temp[2] + temp[4]) # left
+        intensity.append(temp[1] + temp[7])  # straight
+        intensity.append(temp[3] + temp[5]) # straight
+        intensity.append(temp[0] + temp[6]) # left
+        intensity.append(temp[2] + temp[4]) # left
 
-        return_state = pressure + [state['current_phase']] # add id_'s current_phase
+        return_state = intensity + [state['current_phase']] # add id_'s current_phase
 
         for e in neighbor: # add neghbors' current_phase
             interid = inters[0] + '_' + str(e[0]) + '_' + str(e[1])
@@ -283,8 +283,8 @@ class CityFlowEnvM(object):
         '''
         every agent/intersection's reward
         '''
-        distances = self.eng.get_vehicle_distance()
-        start_vehicle_count = [self.get_lanepressure(id_, lane, distances) for lane in self.start_lane[id_]]
+        # distances = self.eng.get_vehicle_distance()
+        start_vehicle_count = self.lane_intensity[id_]['start']
         end_vehicle_count = self.lane_intensity[id_]['end']
         start_vehicle_count_cop = []
         end_vehicle_count_cop = []
@@ -292,9 +292,9 @@ class CityFlowEnvM(object):
             if i % 3 != 2:
                 start_vehicle_count_cop.append(start_vehicle_count[i])
                 end_vehicle_count_cop.append(end_vehicle_count[i])
-        pressure = sum(start_vehicle_count_cop) - sum(end_vehicle_count_cop)
+        intensity = sum(start_vehicle_count_cop) - sum(end_vehicle_count_cop)
 
-        reward = -pressure
+        reward = -intensity
         return reward
 
     def get_pressure(self):

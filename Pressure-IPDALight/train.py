@@ -41,7 +41,7 @@ def main():
 
     config = {
         'cityflow_config_file': "data/cityflow.config",
-        'epoch': 20,
+        'epoch': 200,
         'num_step': 3600,  # 每个epoch的执行步数
         'save_freq': 1,
         'phase_step': 5,  # 每个相位的基础持续时间
@@ -145,7 +145,7 @@ def main():
                     if episode_length % 20 == 0:
                         p = env.get_pressure_(id_)
                         pressure[id_].append(p)
-                next_state, reward_ = env.step(action_phase)  # one step
+                next_state, reward_ = env.step(action_phase, episode_length)  # one step
 
                 total_step += 1
                 pbar.update(1)

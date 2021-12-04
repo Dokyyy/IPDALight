@@ -9,14 +9,14 @@ from copy import deepcopy
 from cityflow_env import CityFlowEnvM
 from utility import *
 # from network import MultiLightAgent
-from dqn_agent import MDQNAgent, DQNAgent
+from dqn_agent import DQNAgent
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 def main():
     date = datetime.now().strftime('%Y%m%d_%H%M%S')
-    dataset = "1_3"
+    dataset = "3_3"
 
     cityflow_config = {
         "interval": 1,
@@ -37,7 +37,7 @@ def main():
 
     config = {
         'cityflow_config_file': "data/cityflow.config",
-        'epoch': 100,
+        'epoch': 200,
         'num_step': 3600,  # 每个epoch的执行步数
         'save_freq': 1,
         'phase_step': 5,  # 每个相位的基础持续时间
@@ -140,7 +140,7 @@ def main():
                         green_wave[id_].append([action_phase[id_], timing_phase[id_]])
 
 
-                next_state, reward_ = env.step(action_phase)  # one step
+                next_state, reward_ = env.step(action_phase, episode_length)  # one step
                 max_time = env.update_waiting_time()
                 if max_time > MAX_WAITING_TIME:
                     MAX_WAITING_TIME = max_time

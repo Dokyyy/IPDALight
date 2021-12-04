@@ -9,7 +9,7 @@ from copy import deepcopy
 from cityflow_env import CityFlowEnvM
 from utility import *
 # from network import MultiLightAgent
-from dqn_agent import MDQNAgent, DQNAgent
+from dqn_agent import DQNAgent
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
@@ -156,7 +156,7 @@ def main():
 
             print('\n')
             print('Epoch {} travel time:'.format(i+1), env.eng.get_average_travel_time())
-            print('Simulation Time:', simulation_time)
+            # print('Simulation Time:', simulation_time)
 
         df = pd.DataFrame({"travel time": episode_travel_time})
         df.to_csv(result_dir + '/IPDALight.csv', index=False)
